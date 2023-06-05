@@ -27,7 +27,10 @@ const articleSchema = {
 const Article = mongoose.model("Article", articleSchema);
 
 // Requests targeting all articles
-app.get("/articles", (req, res) => {
+
+app.route("/articles")
+
+.get((req, res) => {
     Article.find({}, (err, foundArticles) => {
         if(!err){
 
@@ -37,10 +40,9 @@ app.get("/articles", (req, res) => {
             res.send(err);
         }
     });
-});
+})
 
-// Post request to create new article
-app.post("/articles", (req, res) => {
+.post( (req, res) => {
     const newArticle = new Article({
         title: req.body.title,
         content: req.body.content
@@ -54,16 +56,39 @@ app.post("/articles", (req, res) => {
         }
     }
     );
-});
+})
 
-// Delete request to delete all articles
-app.delete("/articles", (req, res) => {
+.delete((req, res) => {
     Article.deleteMany({}, (err) => {
         if(!err){
             res.send("Successfully deleted all articles");
         }
         else{
             res.send(err);
+        }
+    });
+});
+
+// // Requests targeting all articles
+// app.get("/articles", );
+
+// // Post request to create new article
+// app.post("/articles",);
+
+// // Delete request to delete all articles
+// app.delete("/articles", );
+
+// Requests targeting a specific article
+
+app.route("/articles/:articleTitle")
+
+.get((req, res) => {
+    Article.findOne({title: req.params.articleTitle}, (err, foundArticle) => {
+        if(foundArticle){
+            res.send(foundArticle);
+        }
+        else{
+            res.send("No articles matching that title was found");
         }
     });
 });
