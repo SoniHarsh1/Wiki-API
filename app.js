@@ -91,6 +91,40 @@ app.route("/articles/:articleTitle")
             res.send("No articles matching that title was found");
         }
     });
+})
+
+.put((req, res) => {
+    Article.update({title: req.params.articleTitle}, {title: req.body.title, content: req.body.content}
+        , {overwrite: true}, (err) => {
+            if(!err){
+                res.send("Successfully updated article");
+            }
+            else{
+                res.send(err);
+            }
+        });
+})
+
+.patch((req, res) => {
+    Article.update({title: req.params.articleTitle}, {$set: req.body}, (err) => {
+        if(!err){
+            res.send("Successfully updated article");
+        }
+        else{
+            res.send(err);
+        }
+    });
+})
+
+.delete((req, res) => {
+    Article.deleteOne({title: req.params.articleTitle}, (err) => {
+        if(!err){
+            res.send("Successfully deleted article");
+        }
+        else{
+            res.send(err);
+        }
+    });
 });
 
 
